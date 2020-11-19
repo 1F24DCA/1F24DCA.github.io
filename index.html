@@ -24,6 +24,10 @@
 
         <!-- BODY 태그 최하단 HTML 생성 코드에 사용될 배열 -->
         <script>
+            // 트래픽 등의 문제로 필요할 경우 GitHub에 올라간 이미지를 가져올 수 있게끔 처리
+            let imagepath = "./image";
+            //let imagepath = "https://raw.githubusercontent.com/1F24DCA/1f24dca.github.io/main/image";
+
             let projects = [
                 /*{
                     id: 'cash',
@@ -542,7 +546,7 @@
 
                 $('#project-carousel > .carousel-inner').append(`
                     <div class="carousel-item ${active}">
-                        <img src="./image/projects/${project.id}.jpg" style="width: 100%; height: auto">
+                        <img src="${imagepath}/projects/${project.id}.jpg" style="width: 100%; height: auto">
                         <div class="carousel-caption border" style="background-color: #FFFFFFCC;">
                             <div class="text-secondary small">(${parseInt(idx)+1}/${projects.length})</div>
                             <h3 class="text-dark">${project.title}</h3>
@@ -588,7 +592,7 @@
                     $('#skill-list-favorites').append(`
                         <div class="col">
                             <div class="skill-${skill.id} d-flex flex-column align-items-center py-4">
-                                <img src="./image/skills/${skill.id}.jpg" style="width: 2rem; height: 2rem">
+                                <img src="${imagepath}/skills/${skill.id}.jpg" style="width: 2rem; height: 2rem">
                                 <span>${skill.title}</span>
                             </div>
                         </div>
@@ -603,7 +607,7 @@
 
                 $('#skill-list-all').append(`
                     <td class="skill-${skill.id} w-25" data-offset="-45%">
-                        <img src="./image/skills/${skill.id}.jpg" style="width: 1.25rem; height: 1.25rem">
+                        <img src="${imagepath}/skills/${skill.id}.jpg" style="width: 1.25rem; height: 1.25rem">
                         <span>${skill.title}</span>
                     </td>
                 `);
