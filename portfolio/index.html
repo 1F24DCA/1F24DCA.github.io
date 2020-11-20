@@ -27,14 +27,18 @@
         <!-- 참고 링크 #2: https://css-tricks.com/snippets/jquery/smooth-scrolling/ -->
         <script>
             $(document).ready(function() {
+                // nav 태그 안에 존재하는 a 링크를 클릭했을 때 실행함
                 $("nav a").on('click',function(e) {
+                    // 각 섹션 div 태그의 id 속성값을 받아옴
                     let url = e.target.href;
                     let sectionId = '#'+url.substring(url.indexOf("#")+1);
+                    // 해당 섹션 div 태그의 위치로 이동(behaivor: smooth로 부드럽게 이동)
                     window.scroll({
                         top: $(sectionId).offset().top, 
                         left: 0, 
                         behavior: 'smooth'
                     });
+                    // 기존 A태그의 해야할 일(href로 이동)을 비활성화
                     return false;
                 });
             });
