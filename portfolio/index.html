@@ -13,6 +13,18 @@
             {
                 padding-top: 6rem;
             }
+
+            .blink-animation
+            {
+                animation:blink 1s ease-in-out infinite alternate;
+            }
+            @keyframes blink
+            {
+                0.000% { opacity:0; }
+                50.00% { opacity:0; }
+                50.01% { opacity:1; }
+                100.0% { opacity:1; }
+            }
         </style>
 
         <!-- 태그 참조와 each문 등의 간결한 코드 표현을 위해 jQuery 라이브러리 로드-->
@@ -501,7 +513,7 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;생년월일: 1997-06-27<br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;이메일: fstflr446712@gmail.com<br>
                                 &nbsp;&nbsp;&nbsp;&nbsp;취미: 조립 및 분해, 전반적인 프로그램 제작, 삽질<br>
-                                <span class="text-success">portfolio@1f24dca.github.io</span>:<span class="text-primary">~</span>$ _
+                                <span class="text-success">portfolio@1f24dca.github.io</span>:<span class="text-primary">~</span>$ <span class="font-weight-bold blink-animation">_</span>
                             </div>
                         </div>
                         <!-- GitHub Gist 사용-->
