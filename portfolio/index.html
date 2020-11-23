@@ -14,6 +14,7 @@
                 padding-top: 6rem;
             }
 
+            /* 프로필 터미널 창의 커서 깜빡거림을 구현함 */
             .blink-animation
             {
                 animation:blink 1s ease-in-out infinite alternate;
@@ -24,6 +25,22 @@
                 50.00% { opacity:0; }
                 50.01% { opacity:1; }
                 100.0% { opacity:1; }
+            }
+
+            /* 각 프로젝트 아이템 간 이동을 돕는 탭의 이미지 크기 조정 및 마우스 커서 모양 변경 */
+            #project-tab .nav-item
+            {
+                display: inline-block;
+                width: 16.66%;
+            }
+            #project-tab .nav-link
+            {
+                cursor: pointer;
+            }
+            #project-tab img
+            {
+                width: 100%;
+                height: auto;
             }
         </style>
 
@@ -56,6 +73,21 @@
             });
         </script>
 
+        <!-- Project Tab과 Carousel 선택 시 서로간의 선택된 아이템 동기화 코드 -->
+        <script>
+            $(document).ready(function() {
+                for (let idx=0; idx<projects.length; idx+=1) {
+                    $('#project-tab li:eq('+idx+') a').click(function(e) {
+                        $('#project-carousel').carousel(idx);
+                    });
+                }
+
+                $('#project-carousel').on('slide.bs.carousel', function(e) {
+                    $('#project-tab li:eq('+e.to+') a').tab('show');
+                });
+            });
+        </script>
+
         <!-- BODY 태그 최하단 HTML 생성 코드에 사용될 배열 -->
         <script>
             // 트래픽 등의 문제로 필요할 경우 GitHub에 올라간 이미지를 가져올 수 있게끔 처리
@@ -63,7 +95,7 @@
             //let imagepath = "https://raw.githubusercontent.com/1F24DCA/1f24dca.github.io/main/portfolio/image";
 
             let projects = [
-                /*{
+                {
                     id: 'cash',
                     title: '가계부',
                     description: `
@@ -72,7 +104,7 @@
                     `,
                     webpage: 'http://goodee.firstfloor.pe.kr/cash',
                     github: 'https://github.com/1F24DCA/cash'
-                },*/
+                },
                 {
                     id: 'sakila',
                     title: '비디오 대여점',
@@ -112,7 +144,7 @@
                     `,
                     webpage: 'http://goodee.firstfloor.pe.kr/employees',
                     github: 'https://github.com/1F24DCA/employees'
-                },
+                }
             ];
 
             let skills = [
@@ -469,14 +501,6 @@
                         </a>
                     </li>
                 </ul>
-                
-                <!--
-                <div class="font-weight-light text-light small text-right float-right mr-n2">
-                    <div class="mb-1">신동한</div>
-                    <div>010-6415-1647</div>
-                    <div>fstflr446712@gmail.com</div>
-                </div>
-                -->
             </div>
         </nav>
 
@@ -541,15 +565,21 @@
 
                 <hr>
 
-                <div id="project-carousel" class="carousel slide border" data-ride="carousel" data-interval="false">
-                    <div class="carousel-inner"></div>
+                <div class="m-4">
+                    <ul id="project-tab" class="nav nav-tabs border-0"></ul>
 
-                    <a class="carousel-control-prev ml-n4" href="#project-carousel" data-slide="prev">
-                        <span class="display-4 font-weight-bold text-dark">◀</span>
-                    </a>
-                    <a class="carousel-control-next mr-n4" href="#project-carousel" data-slide="next">
-                        <span class="display-4 font-weight-bold text-dark">▶</span>
-                    </a>
+                    <div class="border border-left border-right border-bottom p-4">
+                        <div id="project-carousel" class="carousel slide border" data-ride="carousel" data-interval="false">
+                            <div class="carousel-inner"></div>
+
+                            <a class="carousel-control-prev ml-n4" href="#project-carousel" data-slide="prev">
+                                <span class="display-4 font-weight-bold text-dark">◀</span>
+                            </a>
+                            <a class="carousel-control-next mr-n4" href="#project-carousel" data-slide="next">
+                                <span class="display-4 font-weight-bold text-dark">▶</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
                 
@@ -577,6 +607,14 @@
                 if (idx == 0) {
                     active = 'active'
                 }
+                
+                $('#project-tab').append(`
+                    <li class="nav-item">
+                        <a class="nav-link ${active}" data-toggle="tab">
+                            <img src="${imagepath}/projects/${project.id}.jpg">
+                        </a>
+                    </li>
+                `);
 
                 $('#project-carousel > .carousel-inner').append(`
                     <div class="carousel-item ${active}">
