@@ -33,15 +33,6 @@
                 display: inline-block;
                 width: 16.66%;
             }
-            #project-tab .nav-link
-            {
-                cursor: pointer;
-            }
-            #project-tab img
-            {
-                width: 100%;
-                height: auto;
-            }
         </style>
 
         <!-- 태그 참조와 each문 등의 간결한 코드 표현을 위해 jQuery 라이브러리 로드-->
@@ -51,51 +42,19 @@
         <!-- 부트스트랩 Carousel 등의 처리에 사용되는 Bootstrap 라이브러리 로드 -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-        <!-- Anchor 태그 클릭 시 스크롤을 부드럽게 이동하는 자바스크립트 코드 -->
-        <!-- 참고 링크 #1: https://stackoverflow.com/a/35032979 -->
-        <!-- 참고 링크 #2: https://css-tricks.com/snippets/jquery/smooth-scrolling/ -->
-        <script>
-            $(document).ready(function() {
-                // nav 태그 안에 존재하는 a 링크를 클릭했을 때 실행함
-                $("nav a").on('click',function(e) {
-                    // 각 섹션 div 태그의 id 속성값을 받아옴
-                    let url = e.target.href;
-                    let sectionId = '#'+url.substring(url.indexOf("#")+1);
-                    // 해당 섹션 div 태그의 위치로 이동(behaivor: smooth로 부드럽게 이동)
-                    window.scroll({
-                        top: $(sectionId).offset().top, 
-                        left: 0, 
-                        behavior: 'smooth'
-                    });
-                    // 기존 A태그의 해야할 일(href로 이동)을 비활성화
-                    return false;
-                });
-            });
-        </script>
-
-        <!-- Project Tab과 Carousel 선택 시 서로간의 선택된 아이템 동기화 코드 -->
-        <script>
-            $(document).ready(function() {
-                for (let idx=0; idx<projects.length; idx+=1) {
-                    $('#project-tab li:eq('+idx+') a').click(function(e) {
-                        $('#project-carousel').carousel(idx);
-                    });
-                }
-
-                $('#project-carousel').on('slide.bs.carousel', function(e) {
-                    $('#project-tab li:eq('+e.to+') a').tab('show');
-                });
-            });
-        </script>
-
-        <!-- BODY 태그 최하단 HTML 생성 코드에 사용될 배열 -->
+        <!-- 상수 목록 -->
         <script>
             // 트래픽 등의 문제로 필요할 경우 GitHub에 올라간 이미지를 가져올 수 있게끔 처리
-            let imagepath = "./image";
-            //let imagepath = "https://raw.githubusercontent.com/1F24DCA/1f24dca.github.io/main/portfolio/image";
+            const IMAGE_PATH = "./image";
+            //const IMAGE_PATH = "https://raw.githubusercontent.com/1F24DCA/1f24dca.github.io/main/portfolio/image";
 
-            let projects = [
-                {
+            // 활성화된 탭 색상과 비활성화된 탭 색상 선언
+            const ACTIVE_TABCOLOR = "#FFFFFF";
+            const INACTIVE_TABCOLOR = "#DEE2E6";
+
+            // 자동 생성시 사용되는 프로젝트 목록
+            const PROJECTS = [
+                /*{
                     id: 'cash',
                     title: '가계부',
                     description: `
@@ -104,7 +63,7 @@
                     `,
                     webpage: 'http://goodee.firstfloor.pe.kr/cash',
                     github: 'https://github.com/1F24DCA/cash'
-                },
+                },*/
                 {
                     id: 'sakila',
                     title: '비디오 대여점',
@@ -147,7 +106,8 @@
                 }
             ];
 
-            let skills = [
+            // 자동 생성시 사용되는 스킬 목록
+            const SKILLS = [
                 {
                     id: 'java',
                     favorites: true,
@@ -469,6 +429,60 @@
                 }
             ];
         </script>
+
+        <!-- 이벤트 처리 관련 코드 -->
+        <script>
+            $(document).ready(function() {
+                /*
+                    Anchor 태그 클릭 시 스크롤을 부드럽게 이동하는 자바스크립트 코드
+                    참고 링크 #1: https://stackoverflow.com/a/35032979
+                    참고 링크 #2: https://css-tricks.com/snippets/jquery/smooth-scrolling/
+                */
+                // nav 태그 안에 존재하는 a 링크를 클릭했을 때 실행함
+                $("nav a").on('click',function(e) {
+                    // 각 섹션 div 태그의 id 속성값을 받아옴
+                    let url = e.target.href;
+                    let sectionId = '#'+url.substring(url.indexOf("#")+1);
+                    // 해당 섹션 div 태그의 위치로 이동(behaivor: smooth로 부드럽게 이동)
+                    window.scroll({
+                        top: $(sectionId).offset().top, 
+                        left: 0, 
+                        behavior: 'smooth'
+                    });
+                    // 기존 A태그의 해야할 일(href로 이동)을 비활성화
+                    return false;
+                });
+
+                /*
+                    Tab의 활성화/비활성화 탭 색상 변경 코드
+                */
+                $('.nav-tabs a').each(function(_, element) {
+                    if ($(element).hasClass('active') == true) {
+                        $(element).css('background-color', ACTIVE_TABCOLOR);
+                    } else {
+                        $(element).css('background-color', INACTIVE_TABCOLOR);
+                    }
+                });
+
+                $('.nav-tabs a').on('show.bs.tab', function(e) {
+                    $(e.target).css('background-color', ACTIVE_TABCOLOR);
+                    $(e.relatedTarget).css('background-color', INACTIVE_TABCOLOR);
+                });
+
+                /*
+                    Project Tab과 Carousel 간의 동기화 코드
+                */
+                for (let idx=0; idx<PROJECTS.length; idx+=1) {
+                    $('#project-tab li:eq('+idx+') a').on('click', function(e) {
+                        $('#project-carousel').carousel(idx);
+                    });
+                }
+
+                $('#project-carousel').on('slide.bs.carousel', function(e) {
+                    $('#project-tab li:eq('+e.to+') a').tab('show');
+                });
+            });
+        </script>
     </head>
 
     <!-- Bootstrap의 Scroll-spy 기능을 사용하여 네비게이션 이동 버튼의 활성화 효과를 줌 (스크롤 위치에 따라 보고 있는 컨텐츠의 a태그 링크를 밝게 표시) -->
@@ -514,7 +528,7 @@
                 <h4>Profile</h4>
                 <div class="m-4">
                     <!-- 프로필 탭 -->
-                    <ul class="nav nav-tabs">
+                    <ul id="profile-tab" class="nav nav-tabs">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#profile-output">Output: ProfileApp</a>
                         </li>
@@ -599,28 +613,28 @@
         <!-- HTML 생성 코드 (프로젝트 Carousel, Skills 테이블 및 툴팁) -->
         <script>
             // Projects HTML 입력
-            for (let idx in projects) {
+            for (let idx in PROJECTS) {
                 idx = parseInt(idx);
-                let project = projects[idx];
+                let project = PROJECTS[idx];
 
                 let active = '';
                 if (idx == 0) {
-                    active = 'active'
+                    active = 'active';
                 }
                 
                 $('#project-tab').append(`
                     <li class="nav-item">
-                        <a class="nav-link ${active}" data-toggle="tab">
-                            <img src="${imagepath}/projects/${project.id}.jpg">
+                        <a class="nav-link ${active}" href="#project-${project.id}" data-toggle="tab">
+                            <img src="${IMAGE_PATH}/projects/${project.id}.jpg" class="border w-100 h-auto">
                         </a>
                     </li>
                 `);
 
                 $('#project-carousel > .carousel-inner').append(`
                     <div class="carousel-item ${active}">
-                        <img src="${imagepath}/projects/${project.id}.jpg" style="width: 100%; height: auto">
+                        <img src="${IMAGE_PATH}/projects/${project.id}.jpg" class="w-100 h-auto">
                         <div class="carousel-caption border" style="background-color: #FFFFFFCC;">
-                            <div class="text-secondary small">(${parseInt(idx)+1}/${projects.length})</div>
+                            <div class="text-secondary small">(${parseInt(idx)+1}/${PROJECTS.length})</div>
                             <h3 class="text-dark">${project.title}</h3>
                             <p class="text-dark">
                                 ${project.description}
@@ -642,29 +656,16 @@
                 `);
             }
 
-            // Skills.title 기준으로 가나다순 정렬
-            skills.sort(function(a, b) {
-                let titleA = a.title.toUpperCase();
-                let titleB = b.title.toUpperCase();
-                if (titleA < titleB) {
-                    return -1;
-                }
-                if (titleA > titleB) {
-                    return 1;
-                }
-                return 0;
-            });
-
             // Skills HTML 입력
-            for (let idx in skills) {
+            for (let idx in SKILLS) {
                 idx = parseInt(idx);
-                let skill = skills[idx];
+                let skill = SKILLS[idx];
 
                 if (skill.favorites) {
                     $('#skill-list-favorites').append(`
                         <div class="col">
                             <div class="skill-${skill.id} d-flex flex-column align-items-center py-4">
-                                <img src="${imagepath}/skills/${skill.id}.jpg" style="width: 2rem; height: 2rem">
+                                <img src="${IMAGE_PATH}/skills/${skill.id}.jpg" style="width: 2rem; height: 2rem">
                                 <span>${skill.title}</span>
                             </div>
                         </div>
@@ -679,7 +680,7 @@
 
                 $('#skill-list-all').append(`
                     <td class="skill-${skill.id} w-25" data-offset="-45%">
-                        <img src="${imagepath}/skills/${skill.id}.jpg" style="width: 1.25rem; height: 1.25rem">
+                        <img src="${IMAGE_PATH}/skills/${skill.id}.jpg" style="width: 1.25rem; height: 1.25rem">
                         <span>${skill.title}</span>
                     </td>
                 `);
