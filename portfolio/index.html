@@ -33,6 +33,21 @@
                 display: inline-block;
                 width: 16.66%;
             }
+
+            .active-tab img
+            {
+                border: 1px solid #DEE2E6;
+            }
+            
+            .inactive-tab
+            {
+                background-color: #6C757D40;
+            }
+            .inactive-tab img
+            {
+                opacity: 0.75;
+                border: 1px solid #6C757D;
+            }
         </style>
 
         <!-- 태그 참조와 each문 등의 간결한 코드 표현을 위해 jQuery 라이브러리 로드-->
@@ -47,10 +62,6 @@
             // 트래픽 등의 문제로 필요할 경우 GitHub에 올라간 이미지를 가져올 수 있게끔 처리
             const IMAGE_PATH = "./image";
             //const IMAGE_PATH = "https://raw.githubusercontent.com/1F24DCA/1f24dca.github.io/main/portfolio/image";
-
-            // 활성화된 탭 색상과 비활성화된 탭 색상 선언
-            const ACTIVE_TABCOLOR = "#FFFFFF";
-            const INACTIVE_TABCOLOR = "#DEE2E680";
 
             // 자동 생성시 사용되는 프로젝트 목록
             const PROJECTS = [
@@ -458,15 +469,26 @@
                 */
                 $('.nav-tabs a').each(function(_, element) {
                     if ($(element).hasClass('active') == true) {
-                        $(element).css('background-color', ACTIVE_TABCOLOR);
+                        $(element).addClass('active-tab');
+                        $(element).css('border', '1px solid #DEE2E6');
+                        $(element).css('border-bottom', '1px solid #FFFFFF');
                     } else {
-                        $(element).css('background-color', INACTIVE_TABCOLOR);
+                        $(element).addClass('inactive-tab');
+                        $(element).css('border', '1px solid #343A4020');
+                        $(element).css('border-bottom', '0px');
                     }
                 });
 
                 $('.nav-tabs a').on('show.bs.tab', function(e) {
-                    $(e.target).css('background-color', ACTIVE_TABCOLOR);
-                    $(e.relatedTarget).css('background-color', INACTIVE_TABCOLOR);
+                    $(e.target).removeClass('inactive-tab');
+                    $(e.target).addClass('active-tab');
+                    $(e.target).css('border', '1px solid #DEE2E6');
+                    $(e.target).css('border-bottom', '1px solid #FFFFFF');
+                    
+                    $(e.relatedTarget).addClass('inactive-tab');
+                    $(e.relatedTarget).removeClass('active-tab');
+                    $(e.relatedTarget).css('border', '1px solid #343A4020');
+                    $(e.relatedTarget).css('border-bottom', '0px');
                 });
 
                 /*
@@ -530,13 +552,13 @@
                     <!-- 프로필 탭 -->
                     <ul id="profile-tab" class="nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#profile-output">Output: ProfileApp</a>
+                            <a class="nav-link text-dark active" data-toggle="tab" href="#profile-output">Output: ProfileApp</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#profile-source-profile-app">Source: ProfileApp.java</a>
+                            <a class="nav-link text-dark" data-toggle="tab" href="#profile-source-profile-app">Source: ProfileApp.java</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#profile-source-profile">Source: Profile.java</a>
+                            <a class="nav-link text-dark" data-toggle="tab" href="#profile-source-profile">Source: Profile.java</a>
                         </li>
                     </ul>
 
@@ -580,9 +602,9 @@
                 <hr>
 
                 <div class="m-4">
-                    <ul id="project-tab" class="nav nav-tabs border-0"></ul>
+                    <ul id="project-tab" class="nav nav-tabs"></ul>
 
-                    <div class="border border-left border-right border-bottom p-4">
+                    <div class="tab-content border-left border-right border-bottom p-4">
                         <div id="project-carousel" class="carousel slide border" data-ride="carousel" data-interval="false">
                             <div class="carousel-inner"></div>
 
@@ -625,7 +647,7 @@
                 $('#project-tab').append(`
                     <li class="nav-item">
                         <a class="nav-link ${active}" href="#project-${project.id}" data-toggle="tab">
-                            <img src="${IMAGE_PATH}/projects/${project.id}.jpg" class="border w-100 h-auto">
+                            <img src="${IMAGE_PATH}/projects/${project.id}.jpg" class="w-100 h-auto">
                         </a>
                     </li>
                 `);
