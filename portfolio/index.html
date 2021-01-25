@@ -48,6 +48,11 @@
                 opacity: 0.75;
                 border: 1px solid #6C757D;
             }
+
+            #project-carousel img
+            {
+                cursor: pointer;
+            }
         </style>
 
         <!-- 태그 참조와 each문 등의 간결한 코드 표현을 위해 jQuery 라이브러리 로드-->
@@ -65,6 +70,16 @@
 
             // 자동 생성시 사용되는 프로젝트 목록
             const PROJECTS = [
+                {
+                    id: 'lms',
+                    title: 'LMS',
+                    description: `
+                        7인 팀 프로젝트<br>
+                        2020-12 ~ 2021-01
+                    `,
+                    webpage: 'http://lms-y.kro.kr/lms',
+                    github: 'https://github.com/goodee-project/LMS-Y'
+                },
                 {
                     id: 'cash',
                     title: '가계부',
@@ -503,6 +518,10 @@
                 $('#project-carousel').on('slide.bs.carousel', function(e) {
                     $('#project-tab li:eq('+e.to+') a').tab('show');
                 });
+                
+                $('#project-carousel img').on('click', function(e) {
+                    window.open($(this).attr('href'), '_blank');
+                });
             });
         </script>
     </head>
@@ -654,7 +673,7 @@
 
                 $('#project-carousel > .carousel-inner').append(`
                     <div class="carousel-item ${active}">
-                        <img src="${IMAGE_PATH}/projects/${project.id}.jpg" class="w-100 h-auto">
+                        <img src="${IMAGE_PATH}/projects/${project.id}.jpg" href="${project.webpage}" class="w-100 h-auto">
                         <div class="carousel-caption border" style="background-color: #FFFFFFCC;">
                             <div class="text-secondary small">(${parseInt(idx)+1}/${PROJECTS.length})</div>
                             <h3 class="text-dark">${project.title}</h3>
